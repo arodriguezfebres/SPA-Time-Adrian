@@ -3,6 +3,8 @@ language: generic
 before_install:
   - sh install-powershell.sh
   - pwsh infra/cloudformation/scripts/0_build/install-poetry.ps1
+  - source $HOME/.poetry/env
+  - poetry install
 
 jobs:
   include:
