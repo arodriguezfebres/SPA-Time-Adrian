@@ -7,7 +7,7 @@ before_install:
   - source $HOME/.poetry/env
   - poetry env use python3.7
   - poetry config virtualenvs.create false
-  - poetry install
+  - sudo poetry install
 
 jobs:
   include:
