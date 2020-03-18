@@ -7,7 +7,7 @@ before_install:
   - pwsh infra/cloudformation/scripts/0_build/install-poetry.ps1
   - source $HOME/.poetry/env
   - poetry env use python3.7
-  - poetry config virtualenvs.create false
+  # - poetry config virtualenvs.create false
   - poetry install
 
 jobs:
