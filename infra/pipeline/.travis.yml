@@ -9,5 +9,5 @@ jobs:
     - stage: Build and Test Templates
       before_script: cd $TRAVIS_BUILD_DIR/project
       script: ./cloudformation/scripts/0_build/build-cfn-templates.ps1
-    - stage: Deploy to CloudFormation
+    - stage: Deploy CloudFormation
       script: skip
