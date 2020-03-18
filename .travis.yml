@@ -7,7 +7,7 @@ before_install:
 jobs:
   include:
     - stage: Build and Test Templates
-      before_script: cd $TRAVIS_BUILD_DIR/project
-      script: ./cloudformation/scripts/0_build/build-cfn-templates.ps1
+      before_script: cd $TRAVIS_BUILD_DIR
+      script: infra/cloudformation/scripts/0_build/build-cfn-templates.ps1
     - stage: Deploy CloudFormation
       script: skip
