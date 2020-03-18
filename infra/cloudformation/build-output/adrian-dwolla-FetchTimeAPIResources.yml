@@ -1,0 +1,51 @@
+Description: API Gateway resources.
+Outputs:
+  ApiEndpoint:
+    Description: Endpoint for this stage of the api
+    Value: !Sub 'https://${FetchTime}.execute-api.us-east-1.amazonaws.com/FetchTime'
+  ApiKey:
+    Description: API key
+    Value: !Ref 'ApiKey'
+Resources:
+  ApiKey:
+    Properties:
+      StageKeys:
+        - RestApiId: !Ref 'FetchTime'
+          StageName: !Ref 'FetchTimeStage'
+    Type: AWS::ApiGateway::ApiKey
+  FetchTime:
+    Properties:
+      Name: FetchTime
+    Type: AWS::ApiGateway::RestApi
+  FetchTimeDeployment:
+    Properties:
+      RestApiId: !Ref 'FetchTime'
+    Type: AWS::ApiGateway::Deployment
+  FetchTimeStage:
+    Properties:
+      DeploymentId: !Ref 'FetchTimeDeployment'
+      RestApiId: !Ref 'FetchTime'
+      StageName: FetchTime
+    Type: AWS::ApiGateway::Stage
+  FoobarResource:
+    Properties:
+      ParentId: !GetAtt 'FetchTime.RootResourceId'
+      PathPart: time
+      RestApiId: !Ref 'FetchTime'
+    Type: AWS::ApiGateway::Resource
+  LambdaMethod:
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      Integration:
+        Credentials: !ImportValue 'adrian-dwolla-FetchTime-FetchTimeRoleArn'
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - StatusCode: '200'
+        Type: AWS
+        Uri: !Sub
+          - arn:aws:apigateway:us-east-1:lambda:path/2020-03-17/functions/${Param1}/invocations
+          - Param1: !ImportValue 'adrian-dwolla-FetchTime-FetchTimeArn'
+      ResourceId: !Ref 'FoobarResource'
+      RestApiId: !Ref 'FetchTime'
+    Type: AWS::ApiGateway::Method

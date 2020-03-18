@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to build S3 stacker bucket
+Resources:
+  StackerBucket:
+    Properties:
+      AccessControl: LogDeliveryWrite
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: adrian-dwolla-stacker-us-east-1
+    Type: AWS::S3::Bucket

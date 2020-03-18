@@ -1,0 +1,12 @@
+
+before_install:
+  - sudo apt-get install -y powershell
+  - pwsh $TRAVIS_BUILD_DIR/project/infra/cloudformation/scripts/0_build/install-poetry.ps1
+
+jobs:
+  include:
+    - stage: Build and Test Templates
+      before_script: cd $TRAVIS_BUILD_DIR/project
+      script: ./cloudformation/scripts/0_build/build-cfn-templates.ps1
+    - stage: Deploy to CloudFormation
+      script: skip

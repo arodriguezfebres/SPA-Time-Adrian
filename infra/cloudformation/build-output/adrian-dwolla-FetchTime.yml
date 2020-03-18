@@ -1,0 +1,76 @@
+Description: Function returns current time.
+Outputs:
+  FetchTimeArn:
+    Export:
+      Name: !Sub
+        - ${Param1}-FetchTimeArn
+        - Param1: !Sub '${AWS::StackName}'
+    Value: !GetAtt 'FetchTime.Arn'
+  FetchTimeName:
+    Export:
+      Name: !Sub
+        - ${Param1}-FetchTimeName
+        - Param1: !Sub '${AWS::StackName}'
+    Value: !Ref 'FetchTime'
+  FetchTimeRoleArn:
+    Export:
+      Name: !Sub
+        - ${Param1}-FetchTimeRoleArn
+        - Param1: !Sub '${AWS::StackName}'
+    Value: !GetAtt 'Role.Arn'
+  LatestVersion:
+    Value: !GetAtt 'LatestVersion.Version'
+  LatestVersionArn:
+    Value: !Ref 'LatestVersion'
+  RoleArn:
+    Value: !GetAtt 'Role.Arn'
+  RoleName:
+    Value: !Ref 'Role'
+Resources:
+  FetchTime:
+    Properties:
+      Code:
+        S3Bucket: '<<unresolved: hook data not resolvable>>'
+        S3Key: '<<unresolved: hook data not resolvable>>'
+      Description: |
+        Function returns current time.
+      Environment:
+        Variables: {}
+      FunctionName: adrian-dwolla-FetchTime
+      Handler: func_fetch_time.main
+      MemorySize: 512
+      ReservedConcurrentExecutions: 15
+      Role: !GetAtt 'Role.Arn'
+      Runtime: python3.7
+      Timeout: 895
+    Type: AWS::Lambda::Function
+  LatestVersion:
+    Properties:
+      FunctionName: !Ref 'FetchTime'
+    Type: AWS::Lambda::Version
+  Role:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - apigateway.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns: []
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/adrian-dwolla*'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/adrian-dwolla*:*'
+          PolicyName: !Sub '${AWS::StackName}-policy'
+    Type: AWS::IAM::Role
