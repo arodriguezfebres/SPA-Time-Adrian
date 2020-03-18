@@ -2,6 +2,7 @@ language: generic
 
 before_install:
   - sh install-powershell.sh
+  - ls -haltr
   - pwsh $TRAVIS_BUILD_DIR/project/infra/cloudformation/scripts/0_build/install-poetry.ps1
 
 jobs:
