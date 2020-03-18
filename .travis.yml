@@ -1,3 +1,4 @@
+sudo: true
 language: generic
 
 before_install:
@@ -7,7 +8,7 @@ before_install:
   - source $HOME/.poetry/env
   - poetry env use python3.7
   - poetry config virtualenvs.create false
-  - sudo poetry install
+  - poetry install
 
 jobs:
   include:
