@@ -1,13 +1,19 @@
+sudo: true
 language: generic
 
 before_install:
-  - sh install-powershell.sh
-  - pwsh $TRAVIS_BUILD_DIR/project/infra/cloudformation/scripts/0_build/install-poetry.ps1
+  - sh infra/cloudformation/scripts/0_build/install-powershell.sh
+  - sh infra/cloudformation/scripts/0_build/install-python.sh
+  - python3 -m pip install --user --upgrade pip
+  - pwsh infra/cloudformation/scripts/0_build/install-poetry.ps1
+  - source $HOME/.poetry/env
+  - poetry export -f requirements.txt -o requirements.txt
+  - python3 -m pip install -r requirements.txt
 
 jobs:
   include:
     - stage: Build and Test Templates
-      before_script: cd $TRAVIS_BUILD_DIR/project
-      script: ./cloudformation/scripts/0_build/build-cfn-templates.ps1
+      before_script: cd $TRAVIS_BUILD_DIR
+      script: pwsh infra/cloudformation/scripts/0_build/build-cfn-templates.ps1
     - stage: Deploy CloudFormation
       script: skip
