@@ -2,6 +2,7 @@ language: generic
 
 before_install:
   - sh install-powershell.sh
+  - sudo apt-get install python3.7
   - pwsh infra/cloudformation/scripts/0_build/install-poetry.ps1
   - source $HOME/.poetry/env
   - poetry install
