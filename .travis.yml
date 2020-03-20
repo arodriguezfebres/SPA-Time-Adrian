@@ -11,6 +11,7 @@ jobs:
       script: pipenv install
     - stage: pytest
       before_script:
+        - pipenv --venv | source
         - pipenv shell
         - cd flask_app/
       script: python -m pytest
