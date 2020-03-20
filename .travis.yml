@@ -1,19 +1,16 @@
-sudo: true
-language: generic
+language: python
+python:
+  - "3.7"
 
-before_install:
-  - sh infra/cloudformation/scripts/0_build/install-powershell.sh
-  - sh infra/cloudformation/scripts/0_build/install-python.sh
-  - python3 -m pip install --user --upgrade pip
-  - pwsh infra/cloudformation/scripts/0_build/install-poetry.ps1
-  - source $HOME/.poetry/env
-  - poetry export -f requirements.txt -o requirements.txt
-  - python3 -m pip install -r requirements.txt
+install:
+  - pip install pipenv
 
 jobs:
   include:
-    - stage: Build and Test Templates
-      before_script: cd $TRAVIS_BUILD_DIR
-      script: pwsh infra/cloudformation/scripts/0_build/build-cfn-templates.ps1
-    - stage: Deploy CloudFormation
-      script: skip
+    - stage: pipenv reqs
+      script: pipenv install
+    - stage: pytest
+      before_script:
+        - pipenv install
+        - cd flask_app/
+      script: python -m pytest
