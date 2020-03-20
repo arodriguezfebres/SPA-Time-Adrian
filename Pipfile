@@ -11,7 +11,6 @@ flask = "*"
 flask-restful = "*"
 pytest = "*"
 adrian-dwolla-time = {editable = true,path = "."}
-flaskr = "*"
 
 [requires]
 python_version = "3.7"
